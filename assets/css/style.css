@@ -1,0 +1,14 @@
+body {
+	font-family: 'Cuprum', sans-serif;
+	/*font-family: 'Questrial', sans-serif;*/
+	text-align: center;
+	background-image: url(../images/background.png);
+}
+
+div {
+	border: 1px solid red;
+}
+
+h1 {
+	font-size: 50px;
+}
