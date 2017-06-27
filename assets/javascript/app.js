@@ -4,8 +4,8 @@
 //what happens when user gets it right
 //what happens when user gets it wrong
 //reset game
+$(document).ready(function() {
 
-console.log("linked");
 
 var questions = [
 	{
@@ -55,31 +55,67 @@ var rightAnswers = 0;
 
 var wrongAnswers = 0;
 
+var timer = {
+	value: 20,
+	running: false,
+}
+
+
 $("#gamePlay").hide();
 
-function game () {
+function game() {
 
 	function displayQuestion() {
 
 		var i = currentQuestion;
-		$("#questionHeader").html("<h2>" + questions[i].question + "</h2>");
-		$("#optionA").html("<h3>" + questions[i].options[0] + "<h2>");
-		$("#optionB").html("<h3>" + questions[i].options[1] + "<h2>");
-		$("#optionC").html("<h3>" + questions[i].options[2] + "<h2>");
-		$("#optionD").html("<h3>" + questions[i].options[3] + "<h2>");
-	}
+
+    	console.log(timer.value);
+
+    	function counter() {
+    		if (timer.value > 0) {
+    			timer.value--;
+    			$("#counterDiv").html("<h2>" + timer.value + "</h2>")
+    		} else {
+    			timeUp();
+    		};
+    	};
+
+    	counter();
+
+		function timeUp() {
+			$("#answerOptions").hide();
+			$("#questionContent").html("<h3>The correct answer is " + questions[i].options[questions.correctAnswer] + ".</h3>")
+			wrongAnswers++;
+		};
+		
+		
+		$("#questionHeader").html("<h2>Question " + (i+1) + "</h2>");
+		$("#questionContent").html("<h3>" + questions[i].question + "<h3>")
+		$("#optionA").html("<h3>" + questions[i].options[0] + "<h3>");
+		$("#optionB").html("<h3>" + questions[i].options[1] + "<h3>");
+		$("#optionC").html("<h3>" + questions[i].options[2] + "<h3>");
+		$("#optionD").html("<h3>" + questions[i].options[3] + "<h3>");
+	};
+
+
+
+
+
+
+
+
+	
 
 	$("#gamePlay").show("fast", function(){});
-
-	if (currentQuestion === 0) {
-		$("#questionHeader").html("<h2>" + questions[0].question + "</h2>");
-		$("#optionA").html("<h3>" + questions[0].options[0] + "<h2>");
-		$("#optionB").html("<h3>" + questions[1].options[1] + "<h2>");
-		$("#optionC").html("<h3>" + questions[2].options[2] + "<h2>");
-		$("#optionD").html("<h3>" + questions[3].options[3] + "<h2>");
-	}
+	displayQuestion();
 
 
 }
 
-$("#startButton").on("click", game());
+$("#startButton").on("click", function(){
+	game();
+	$("#startButton").hide();
+});
+
+
+});
