@@ -47,7 +47,7 @@ var questions = [
 	question: "How many US states border the Pacific Ocean?",
 	options: ["Two", "Three", "Four", "Five"],
 	correctAnswer: 3,
-}]
+}];
 
 var currentQuestion = 0;
 
@@ -56,61 +56,60 @@ var rightAnswers = 0;
 var wrongAnswers = 0;
 
 var timer = {
-	value: 20,
+	value: 5,
 	running: false,
-}
+};
 
 
 $("#gamePlay").hide();
 
-function game() {
+	function game() {
 
-	function displayQuestion() {
+		function displayQuestion() {
 
-		var i = currentQuestion;
+			var i = currentQuestion;
 
-    	console.log(timer.value);
+			function timerStart () {
 
-    	function counter() {
-    		if (timer.value > 0) {
-    			timer.value--;
-    			$("#counterDiv").html("<h2>" + timer.value + "</h2>")
-    		} else {
-    			timeUp();
-    		};
-    	};
+		    	timer.running = true;
 
-    	counter();
+		    	intervalId = setInterval(decrement, 1000);
 
-		function timeUp() {
-			$("#answerOptions").hide();
-			$("#questionContent").html("<h3>The correct answer is " + questions[i].options[questions.correctAnswer] + ".</h3>")
-			wrongAnswers++;
+		    	function decrement() {
+		    		timer.value--;
+		    		$("#counterDiv").html("<h2>" + timer.value + "</h2>")
+
+		    		if (timer.value === 0) {
+
+						$("#answerOptions").hide();
+						$("#counterDiv").hide();
+						$("#questionHeader").html("<h2>Wrong!</h2>")
+						$("#questionContent").html("<h3>The correct answer is " + questions[i].options[questions[i].correctAnswer] + ".</h3>")
+						wrongAnswers++;
+						timer.value = 20;
+						timer.running = false;
+
+					};
+				}
+		    }
+			
+			$("#questionHeader").html("<h2>Question " + (i+1) + "</h2>");
+			$("#questionContent").html("<h3>" + questions[i].question + "<h3>")
+			$("#optionA").html("<h3>" + questions[i].options[0] + "<h3>");
+			$("#optionB").html("<h3>" + questions[i].options[1] + "<h3>");
+			$("#optionC").html("<h3>" + questions[i].options[2] + "<h3>");
+			$("#optionD").html("<h3>" + questions[i].options[3] + "<h3>");
+
+			timerStart();
 		};
-		
-		
-		$("#questionHeader").html("<h2>Question " + (i+1) + "</h2>");
-		$("#questionContent").html("<h3>" + questions[i].question + "<h3>")
-		$("#optionA").html("<h3>" + questions[i].options[0] + "<h3>");
-		$("#optionB").html("<h3>" + questions[i].options[1] + "<h3>");
-		$("#optionC").html("<h3>" + questions[i].options[2] + "<h3>");
-		$("#optionD").html("<h3>" + questions[i].options[3] + "<h3>");
-	};
 
 
-
-
-
-
-
-
-	
 
 	$("#gamePlay").show("fast", function(){});
-	displayQuestion();
+		displayQuestion();
 
 
-}
+	};
 
 $("#startButton").on("click", function(){
 	game();
