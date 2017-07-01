@@ -66,10 +66,12 @@ var rightAnswers = 0;
 
 var wrongAnswers = 0;
 
-var timer = {
+var answerTimer = {
 	value: 20,
 	running: false,
 };
+
+var intervalId;
 
 
 $("#gamePlay").hide();
@@ -81,15 +83,19 @@ $("#startButton").on("click", function(){
 
 	function game() {
 
-		function displayQuestion() {
+		// shows the game, shows the question div, checks if all questions have been answered. i is equal to the current question
+		function displayQuestion(i) {
 
-			var i = currentQuestion;
+			$("#gamePlay").show("fast", function(){});
+
+			intervalId = setInterval(countDown, 1000);
 
 			if (i === 8) {
 				$("#answerOptions").hide();
 				$("#questionHeader").html("<h2>Thanks for playing!</h2>")
 				$("#questionContent").html("<h3>Correct: " + rightAnswers + "</h3><br><h3>Incorrect: " + wrongAnswers + 
 					"</h3>");
+				setTimeout(gameReplay, 1000 * 5);
 			} else {
 			
 				$("#questionHeader").html("<h2>Question " + (i+1) + "</h2>");
@@ -100,18 +106,41 @@ $("#startButton").on("click", function(){
 				$("#optionD").html("<h3>" + questions[i].options[3] + "<h3>");
 
 			};
-
+			
 		};
 
-		$("#next").on("click", function(){
-			console.log("clicked");
-			displayQuestion();
-		});	
+		function countDown() {
+			answerTimer.value--;
+			if (answerTimer.value === 0){
+				clearInterval(intervalId);
+				wrongAnswers++;
+				$("#questionHeader").html("<h2>Wrong!</h2>");
+				$("#questionContent").html("<h3>The correct answer is " + questions[currentQuestion].options[questions[currentQuestion].correctAnswer] + ".</h3>");
+				currentQuestion++;
+				answerTimer.value = 20;
+				displayQuestion(currentQuestion);
+			};
+			$("#counterDiv").html("<h3>" + answerTimer.value + "<h3>");
+		};
 
+		function nextQuestionTimer() {
+			displayQuestion(currentQuestion);
+		};
+
+		// along with timeout function above, restarts game. having trouble showing the question div again on replay though
+		function gameReplay() {
+			currentQuestion = 0;
+			rightAnswers = 0;
+			wrongAnswers = 0;
+			answerTimer.value = 20;
+			game();
+		};
 
 			// on click answering
 
 			$(".answer").on("click", function(){
+				clearInterval(intervalId);
+				setTimeout(nextQuestionTimer, 1000 * 3);
 				if (this.id === "optionA") {
 					var userAnswer = 0;
 					var i = currentQuestion;
@@ -177,13 +206,9 @@ $("#startButton").on("click", function(){
 				};
 			});
 		
+	// displays the question for the first time
+	displayQuestion(currentQuestion);
 
-
-	$("#gamePlay").show("fast", function(){});
-		displayQuestion(currentQuestion);
 	};
-
-
-
 
 });
