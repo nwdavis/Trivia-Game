@@ -5,10 +5,17 @@ body {
 	background-image: url(../images/background.png);
 }
 
-div {
-	border: 1px solid red;
-}
+
 
 h1 {
 	font-size: 50px;
+}
+
+.answer {
+	background-color: grey;
+	opacity: .8;
+}
+
+.answer:hover {
+	opacity: 1.0;
 }

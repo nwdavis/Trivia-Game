@@ -62,8 +62,6 @@ var facts = [
 
 var currentQuestion = 0;
 
-var userAnswer = 0;
-
 var rightAnswers = 0;
 
 var wrongAnswers = 0;
@@ -76,151 +74,116 @@ var timer = {
 
 $("#gamePlay").hide();
 
+$("#startButton").on("click", function(){
+	game();
+	$("#startButton").hide();
+});
+
 	function game() {
-
-		function gameResetTimer () {
-			var intervalId = setInterval(decrement, 1000);
-			var x = 10;
-
-			function decrement() {
-				x--;
-				if (x === 0) {
-					currentQuestion = 0;
-					rightAnswers = 0;
-					wrongAnswers = 0;
-					displayQuestion();
-				};
-			};
-		};
-
-		function nextQuestion() {
-
-			var intervalId = setInterval(increment, 1000);
-
-			var x = 0;
-
-			function increment () {
-				x++;
-				if (x === 10) {
-					displayQuestion();
-				};
-			};
-
-			if (currentQuestion === 8) {
-				$("#answerOptions").hide();
-				$("#questionHeader").html("<h2>Thanks for playing!</h2>")
-				$("#questionContent").html("<h3>Correct: " + rightAnswers + "</h3><br><h3>Incorrect: " + wrongAnswers + 
-					"</h3>");
-				gameResetTimer();	
-			};
-
-		};
 
 		function displayQuestion() {
 
 			var i = currentQuestion;
 
-			if (i !== 0) {
-				console.log("not equal to 0")
-			}
-
-			function timerStart () {
-
-		    	timer.running = true;
-
-		    	var intervalId = setInterval(decrement, 1000);
-
-		    	function decrement() {
-		    		timer.value--;
-		    		$("#counterDiv").html("<h2>" + timer.value + "</h2>")
-
-		    		if (timer.running === false) {
-		    			clearInterval(intervalId);
-		    		}
-		    		if (timer.value === 0) {
-
-						$("#answerOptions").hide();
-						$("#counterDiv").hide();
-						$("#questionHeader").html("<h2>Wrong!</h2>")
-						$("#questionContent").html("<h3>The correct answer is " + questions[i].options[questions[i].correctAnswer] + ".</h3>")
-						wrongAnswers++;
-						timer.value = 20;
-						timer.running = false;
-
-					};
-				}
-		    }
+			if (i === 8) {
+				$("#answerOptions").hide();
+				$("#questionHeader").html("<h2>Thanks for playing!</h2>")
+				$("#questionContent").html("<h3>Correct: " + rightAnswers + "</h3><br><h3>Incorrect: " + wrongAnswers + 
+					"</h3>");
+			} else {
 			
-			$("#questionHeader").html("<h2>Question " + (i+1) + "</h2>");
-			$("#questionContent").html("<h3>" + questions[i].question + "<h3>")
-			$("#optionA").html("<h3>" + questions[i].options[0] + "<h3>");
-			$("#optionB").html("<h3>" + questions[i].options[1] + "<h3>");
-			$("#optionC").html("<h3>" + questions[i].options[2] + "<h3>");
-			$("#optionD").html("<h3>" + questions[i].options[3] + "<h3>");
+				$("#questionHeader").html("<h2>Question " + (i+1) + "</h2>");
+				$("#questionContent").html("<h3>" + questions[i].question + "<h3>")
+				$("#optionA").html("<h3>" + questions[i].options[0] + "<h3>");
+				$("#optionB").html("<h3>" + questions[i].options[1] + "<h3>");
+				$("#optionC").html("<h3>" + questions[i].options[2] + "<h3>");
+				$("#optionD").html("<h3>" + questions[i].options[3] + "<h3>");
 
-			timerStart();
+			};
 
-			$("#optionA").on("click", function() {
-				userAnswer = 0;
-				if (userAnswer === questions[currentQuestion].correctAnswer) {
-					rightAnswers++;
-					$("#questionHeader").html("<h2>Correct!</h2>");
-					$("#questionContent").html("<h3>" + facts[i] + "</h3>");
-					currentQuestion++;
-					timer.value = 20;
-					timer.running = false;
-					nextQuestion();
-				};
-			});
-			$("#optionB").on("click", function() {
-				userAnswer = 1;
-				if (userAnswer === questions[currentQuestion].correctAnswer) {
-					rightAnswers++;
-					$("#questionHeader").html("<h2>Correct!</h2>");
-					$("#questionContent").html("<h3>" + facts[i] + "</h3>");
-					currentQuestion++;
-					timer.value = 20;
-					timer.running = false;
-					nextQuestion();
-				};
-			});
-			$("#optionC").on("click", function() {
-				userAnswer = 2;
-				if (userAnswer === questions[currentQuestion].correctAnswer) {
-					rightAnswers++;
-					$("#questionHeader").html("<h2>Correct!</h2>");
-					$("#questionContent").html("<h3>" + facts[i] + "</h3>");
-					currentQuestion++;
-					timer.value = 20;
-					timer.running = false;
-					nextQuestion();
-				};
-			});
-			$("#optionD").on("click", function() {
-				userAnswer = 3;
-				if (userAnswer === questions[currentQuestion].correctAnswer) {
-					rightAnswers++;
-					$("#questionHeader").html("<h2>Correct!</h2>");
-					$("#questionContent").html("<h3>" + facts[i] + "</h3>");
-					currentQuestion++;
-					timer.value = 20;
-					timer.running = false;
-					nextQuestion();
-				};
-			});
 		};
 
+		$("#next").on("click", function(){
+			console.log("clicked");
+			displayQuestion();
+		});	
 
+
+			// on click answering
+
+			$(".answer").on("click", function(){
+				if (this.id === "optionA") {
+					var userAnswer = 0;
+					var i = currentQuestion;
+					if (userAnswer === questions[currentQuestion].correctAnswer) {
+						rightAnswers++;
+						$("#questionHeader").html("<h2>Correct!</h2>");
+						$("#questionContent").html("<h3>" + facts[i] + "</h3>");
+						currentQuestion++;
+					} else {
+						wrongAnswers++;
+						$("#questionHeader").html("<h2>Wrong!</h2>");
+						$("#questionContent").html("<h3>The correct answer is " + questions[i].options[questions[i].correctAnswer] + ".</h3>");
+						currentQuestion++;
+					};
+				};
+
+				if (this.id === "optionB") {
+					var userAnswer = 1;
+					var i = currentQuestion;
+					if (userAnswer === questions[currentQuestion].correctAnswer) {
+						rightAnswers++;
+						$("#questionHeader").html("<h2>Correct!</h2>");
+						$("#questionContent").html("<h3>" + facts[i] + "</h3>");
+						currentQuestion++;
+					} else {
+						wrongAnswers++;
+						$("#questionHeader").html("<h2>Wrong!</h2>");
+						$("#questionContent").html("<h3>The correct answer is " + questions[i].options[questions[i].correctAnswer] + ".</h3>");
+						currentQuestion++;
+					};
+				}
+
+				if (this.id ==="optionC"){
+					var userAnswer = 2;
+					var i = currentQuestion;
+					if (userAnswer === questions[currentQuestion].correctAnswer) {
+						rightAnswers++;
+						$("#questionHeader").html("<h2>Correct!</h2>");
+						$("#questionContent").html("<h3>" + facts[i] + "</h3>");
+						currentQuestion++;
+					} else {
+						wrongAnswers++;
+						$("#questionHeader").html("<h2>Wrong!</h2>");
+						$("#questionContent").html("<h3>The correct answer is " + questions[i].options[questions[i].correctAnswer] + ".</h3>");
+						currentQuestion++;
+					};
+				};
+
+				if (this.id ==="optionD") {
+					var userAnswer = 3;
+					var i = currentQuestion;
+					if (userAnswer === questions[currentQuestion].correctAnswer) {
+						rightAnswers++;
+						$("#questionHeader").html("<h2>Correct!</h2>");
+						$("#questionContent").html("<h3>" + facts[i] + "</h3>");
+						currentQuestion++;
+					} else {
+						wrongAnswers++;
+						$("#questionHeader").html("<h2>Wrong!</h2>");
+						$("#questionContent").html("<h3>The correct answer is " + questions[i].options[questions[i].correctAnswer] + ".</h3>");
+						currentQuestion++;
+					};
+				};
+			});
+		
 
 
 	$("#gamePlay").show("fast", function(){});
-		displayQuestion();
+		displayQuestion(currentQuestion);
 	};
 
-$("#startButton").on("click", function(){
-	game();
-	$("#startButton").hide();
-});
+
 
 
 });
