@@ -76,6 +76,8 @@ $("#startButton").on("click", function(){
 
 function game() {
 
+	$(".answer").off("click");
+	clearInterval(intervalId);
 
 	function displayQuestion(i) {
 			
